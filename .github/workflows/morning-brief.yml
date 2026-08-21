@@ -1,0 +1,51 @@
+name: NSE Morning Digest
+
+on:
+  schedule:
+    # 01:30 UTC = 07:00 IST, weekdays. GitHub Actions cron is UTC only.
+    - cron: "30 1 * * 1-5"
+  workflow_dispatch: {}
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -q yfinance feedparser nsepython pandas requests
+
+      - name: Fetch pre-market data
+        run: python fetch.py
+
+      - name: Send digest
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          FILE=$(ls -t data/premarket_*.json | head -1)
+          echo "using $FILE"
+          python digest.py "$FILE"
+
+      - name: Upload data on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: premarket-data-${{ github.run_id }}
+          path: data/
+          retention-days: 7
+
+      - name: Notify on failure
+        if: failure()
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+            --data-urlencode chat_id="${TELEGRAM_CHAT_ID}" \
+            --data-urlencode text="NSE Morning Digest failed today (run ${{ github.run_id }}). Check the Actions log: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
