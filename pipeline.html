@@ -1,0 +1,756 @@
+<title>NSE Morning Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+  :root {
+    --ground: #F6F7F9;
+    --panel: #FFFFFF;
+    --panel-2: #EDEFF3;
+    --ink: #141821;
+    --ink-soft: #4A5262;
+    --ink-faint: #79808F;
+    --line: #DCE0E7;
+    --machine: #0B6E62;
+    --machine-soft: #E2F1EE;
+    --judgment: #9A5F0B;
+    --judgment-soft: #F7EBD9;
+    --danger: #9E3550;
+    --shadow: 0 1px 2px rgba(20, 24, 33, .05), 0 8px 24px rgba(20, 24, 33, .04);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0F1218;
+      --panel: #171B23;
+      --panel-2: #1E232D;
+      --ink: #E8EBF0;
+      --ink-soft: #A8B0BE;
+      --ink-faint: #79818F;
+      --line: #2A303B;
+      --machine: #4ECDB8;
+      --machine-soft: #12302C;
+      --judgment: #E8AC55;
+      --judgment-soft: #332616;
+      --danger: #E3778E;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .22);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #0F1218;
+    --panel: #171B23;
+    --panel-2: #1E232D;
+    --ink: #E8EBF0;
+    --ink-soft: #A8B0BE;
+    --ink-faint: #79818F;
+    --line: #2A303B;
+    --machine: #4ECDB8;
+    --machine-soft: #12302C;
+    --judgment: #E8AC55;
+    --judgment-soft: #332616;
+    --danger: #E3778E;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .22);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: clamp(28px, 5vw, 64px) clamp(18px, 4vw, 40px) 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+  }
+
+  .eyebrow {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin: 0;
+  }
+
+  h1 {
+    font-family: Newsreader, Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(38px, 6.5vw, 62px);
+    line-height: 1.04;
+    letter-spacing: -.015em;
+    margin: 12px 0 0;
+    text-wrap: balance;
+  }
+
+  .standfirst {
+    font-family: Newsreader, Georgia, serif;
+    font-size: clamp(17px, 2.2vw, 21px);
+    line-height: 1.5;
+    color: var(--ink-soft);
+    max-width: 62ch;
+    margin: 16px 0 0;
+  }
+
+  h2 {
+    font-family: Newsreader, Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(24px, 3.4vw, 33px);
+    line-height: 1.15;
+    letter-spacing: -.01em;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0;
+    letter-spacing: -.005em;
+  }
+
+  p { margin: 0; max-width: 68ch; }
+  .lede { color: var(--ink-soft); }
+
+  section { display: flex; flex-direction: column; gap: 20px; }
+
+  code, .mono {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: .88em;
+  }
+
+  code {
+    background: var(--panel-2);
+    padding: .1em .38em;
+    border-radius: 3px;
+    color: var(--ink);
+  }
+
+  /* ---- timeline rail ---- */
+  .rail {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(126px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .tick {
+    background: var(--panel);
+    padding: 14px 15px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .tick .t {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 14px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+  }
+
+  .tick .d { font-size: 12.5px; line-height: 1.4; color: var(--ink-soft); }
+  .tick.is-machine { border-top: 2px solid var(--machine); }
+  .tick.is-judgment { border-top: 2px solid var(--judgment); }
+  .tick.is-open { border-top: 2px solid var(--ink-faint); }
+
+  /* ---- figures ---- */
+  figure {
+    margin: 0;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: clamp(14px, 2.5vw, 26px);
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .scroller { overflow-x: auto; }
+  svg.diagram { display: block; width: 100%; min-width: 620px; height: auto; color: var(--ink); }
+
+  figcaption {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    max-width: 74ch;
+    border-top: 1px solid var(--line);
+    padding-top: 12px;
+  }
+
+  /* ---- agent cards ---- */
+  .agents {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(272px, 1fr));
+    gap: 16px;
+  }
+
+  .agent {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--judgment);
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    box-shadow: var(--shadow);
+  }
+
+  .agent header { display: flex; flex-direction: column; gap: 3px; }
+
+  .agent .slug {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--judgment);
+  }
+
+  .agent .file {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11.5px;
+    color: var(--ink-faint);
+    word-break: break-all;
+  }
+
+  .agent ul { margin: 0; padding-left: 17px; display: flex; flex-direction: column; gap: 7px; }
+  .agent li { font-size: 13.5px; line-height: 1.45; color: var(--ink-soft); }
+  .agent li strong { color: var(--ink); font-weight: 600; }
+
+  .toolrow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    border-top: 1px solid var(--line);
+    padding-top: 13px;
+    margin-top: auto;
+  }
+
+  .chip {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: var(--panel-2);
+    color: var(--ink-soft);
+    white-space: nowrap;
+  }
+
+  .chip.machine { background: var(--machine-soft); color: var(--machine); }
+  .chip.judgment { background: var(--judgment-soft); color: var(--judgment); }
+
+  /* ---- table ---- */
+  .tablewrap {
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--panel);
+    box-shadow: var(--shadow);
+  }
+
+  table { border-collapse: collapse; width: 100%; min-width: 580px; }
+
+  th, td {
+    text-align: left;
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--line);
+    font-size: 13.5px;
+    vertical-align: top;
+  }
+
+  th {
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-weight: 500;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    background: var(--panel-2);
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+  td.stage { white-space: nowrap; font-weight: 600; }
+  td .sub { display: block; color: var(--ink-faint); font-size: 12.5px; margin-top: 2px; }
+
+  /* ---- split ---- */
+  .split { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 16px; }
+
+  .half {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+    background: var(--panel);
+  }
+
+  .half.machine { border-left: 3px solid var(--machine); }
+  .half.judgment { border-left: 3px solid var(--judgment); }
+  .half h3 { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; }
+  .half.machine h3 { color: var(--machine); }
+  .half.judgment h3 { color: var(--judgment); }
+  .half ul { margin: 0; padding-left: 17px; display: flex; flex-direction: column; gap: 7px; }
+  .half li { font-size: 13.5px; line-height: 1.45; color: var(--ink-soft); }
+
+  .note {
+    border-left: 2px solid var(--judgment);
+    padding: 2px 0 2px 16px;
+    font-size: 14px;
+    color: var(--ink-soft);
+    max-width: 68ch;
+  }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 18px; align-items: center; font-size: 12.5px; color: var(--ink-soft); }
+  .legend span { display: flex; align-items: center; gap: 7px; }
+  .sw { width: 22px; height: 3px; border-radius: 2px; display: block; }
+  .sw.m { background: var(--machine); }
+  .sw.j { background: var(--judgment); }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding-top: 20px;
+    font-size: 13px;
+    color: var(--ink-faint);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+</style>
+
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">NSE F&amp;O · intraday and 2–10 day swing · cash only</p>
+    <h1>NSE Morning Brief</h1>
+    <p class="standfirst">A pre-market pipeline that fetches once, splits the data three ways, and lets three
+      agents reach independent conclusions before anything gets narrowed. Everything deterministic runs in
+      Python; the agents are spent only on judgment.</p>
+  </header>
+
+  <section>
+    <h2>The 07:00 hour</h2>
+    <div class="rail">
+      <div class="tick is-machine">
+        <span class="t">07:00</span>
+        <span class="d"><code>fetch.py</code> pulls and screens. No model involved.</span>
+      </div>
+      <div class="tick is-judgment">
+        <span class="t">07:05</span>
+        <span class="d">Agents A, B and C run in parallel on separate slices.</span>
+      </div>
+      <div class="tick is-judgment">
+        <span class="t">07:25</span>
+        <span class="d">Orchestrator scores confluence and narrows.</span>
+      </div>
+      <div class="tick is-judgment">
+        <span class="t">07:30</span>
+        <span class="d">Brief delivered — file, push, archive.</span>
+      </div>
+      <div class="tick is-open">
+        <span class="t">09:00</span>
+        <span class="d">Optional refresh — actual gap against plan.</span>
+      </div>
+      <div class="tick is-open">
+        <span class="t">09:15</span>
+        <span class="d">Market opens. You trade.</span>
+      </div>
+    </div>
+    <div class="legend">
+      <span><i class="sw m"></i> deterministic — Python, no model</span>
+      <span><i class="sw j"></i> judgment — agent reasoning</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>Pipeline</h2>
+    <figure>
+      <div class="scroller">
+        <svg class="diagram" viewBox="0 0 920 830" role="img"
+             aria-label="One fetch script reads NSE, Yahoo Finance and RSS feeds, writes three separate slice files, and each slice is read by exactly one agent; the three agents' outputs converge on the orchestrator, pass a confluence gate, and produce the brief.">
+          <defs>
+            <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"></path>
+            </marker>
+          </defs>
+
+          <g stroke="currentColor" fill="none" marker-end="url(#ar)" opacity=".55" stroke-width="1.4">
+            <line x1="165" y1="82" x2="165" y2="118"></line>
+            <line x1="460" y1="82" x2="460" y2="118"></line>
+            <line x1="755" y1="82" x2="755" y2="118"></line>
+            <line x1="165" y1="198" x2="165" y2="234"></line>
+            <line x1="460" y1="198" x2="460" y2="234"></line>
+            <line x1="755" y1="198" x2="755" y2="234"></line>
+            <line x1="165" y1="298" x2="165" y2="334"></line>
+            <line x1="460" y1="298" x2="460" y2="334"></line>
+            <line x1="755" y1="298" x2="755" y2="334"></line>
+            <polyline points="165,492 165,512 280,512 280,528"></polyline>
+            <line x1="460" y1="492" x2="460" y2="528"></line>
+            <polyline points="755,492 755,512 640,512 640,528"></polyline>
+            <line x1="460" y1="596" x2="460" y2="632"></line>
+            <polyline points="460,700 460,720 165,720 165,736"></polyline>
+            <line x1="460" y1="700" x2="460" y2="736"></line>
+            <polyline points="460,700 460,720 755,720 755,736"></polyline>
+          </g>
+
+          <!-- isolation barriers -->
+          <g stroke="currentColor" opacity=".28" stroke-width="1" stroke-dasharray="3 5">
+            <line x1="312" y1="228" x2="312" y2="500"></line>
+            <line x1="607" y1="228" x2="607" y2="500"></line>
+          </g>
+          <text x="312" y="220" text-anchor="middle" font-size="10" fill="currentColor" opacity=".5"
+                font-family="IBM Plex Mono, monospace">no shared data</text>
+          <text x="607" y="220" text-anchor="middle" font-size="10" fill="currentColor" opacity=".5"
+                font-family="IBM Plex Mono, monospace">no shared data</text>
+
+          <!-- sources -->
+          <g font-family="IBM Plex Sans, sans-serif">
+            <rect x="40" y="30" width="250" height="52" rx="6" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".45"></rect>
+            <text x="165" y="52" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">NSE</text>
+            <text x="165" y="69" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".7">lot file · FII/DII · deals · events</text>
+
+            <rect x="335" y="30" width="250" height="52" rx="6" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".45"></rect>
+            <text x="460" y="52" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">Yahoo Finance</text>
+            <text x="460" y="69" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".7">OHLCV · indices · FX · commodities</text>
+
+            <rect x="630" y="30" width="250" height="52" rx="6" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".45"></rect>
+            <text x="755" y="52" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">RSS × 5</text>
+            <text x="755" y="69" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".7">ET · Mint · BusinessLine · NDTV</text>
+          </g>
+
+          <!-- fetch -->
+          <g font-family="IBM Plex Sans, sans-serif">
+            <rect x="40" y="122" width="840" height="76" rx="8" fill="var(--machine-soft)" stroke="var(--machine)" stroke-width="1.5"></rect>
+            <text x="60" y="150" font-size="14" font-weight="600" fill="var(--machine)" font-family="IBM Plex Mono, monospace">fetch.py</text>
+            <text x="146" y="150" font-size="11" fill="var(--machine)" opacity=".85">deterministic · no model · 36 assertions</text>
+            <text x="60" y="172" font-size="11.5" fill="currentColor" opacity=".8">209-name F&amp;O universe · pandas screen (Wilder RSI, ATR) · stop floored at 1 ATR</text>
+            <text x="60" y="188" font-size="11.5" fill="currentColor" opacity=".8">headline → symbol tagger · 48h age filter · cross-post dedupe · deal netting</text>
+          </g>
+
+          <!-- slices -->
+          <g font-family="IBM Plex Sans, sans-serif">
+            <rect x="40" y="238" width="250" height="60" rx="6" fill="var(--panel-2)" stroke="currentColor" stroke-opacity=".3" stroke-width="1"></rect>
+            <text x="165" y="262" text-anchor="middle" font-size="11.5" fill="currentColor" font-family="IBM Plex Mono, monospace">slice_macro</text>
+            <text x="165" y="281" text-anchor="middle" font-size="15" font-weight="600" fill="currentColor" font-family="IBM Plex Mono, monospace">4 KB</text>
+
+            <rect x="335" y="238" width="250" height="60" rx="6" fill="var(--panel-2)" stroke="currentColor" stroke-opacity=".3" stroke-width="1"></rect>
+            <text x="460" y="262" text-anchor="middle" font-size="11.5" fill="currentColor" font-family="IBM Plex Mono, monospace">slice_flows</text>
+            <text x="460" y="281" text-anchor="middle" font-size="15" font-weight="600" fill="currentColor" font-family="IBM Plex Mono, monospace">33 KB</text>
+
+            <rect x="630" y="238" width="250" height="60" rx="6" fill="var(--panel-2)" stroke="currentColor" stroke-opacity=".3" stroke-width="1"></rect>
+            <text x="755" y="262" text-anchor="middle" font-size="11.5" fill="currentColor" font-family="IBM Plex Mono, monospace">slice_technical</text>
+            <text x="755" y="281" text-anchor="middle" font-size="15" font-weight="600" fill="currentColor" font-family="IBM Plex Mono, monospace">24 KB</text>
+          </g>
+
+          <!-- agents -->
+          <g font-family="IBM Plex Sans, sans-serif">
+            <rect x="40" y="338" width="250" height="154" rx="8" fill="var(--judgment-soft)" stroke="var(--judgment)" stroke-width="1.5"></rect>
+            <text x="60" y="362" font-size="10.5" fill="var(--judgment)" font-family="IBM Plex Mono, monospace" letter-spacing="1">AGENT A</text>
+            <text x="60" y="382" font-size="14" font-weight="600" fill="currentColor">Macro</text>
+            <text x="60" y="405" font-size="11.5" fill="currentColor" opacity=".8">Overnight moves and why</text>
+            <text x="60" y="423" font-size="11.5" fill="currentColor" opacity=".8">Crude / INR / 10Y transmission</text>
+            <text x="60" y="441" font-size="11.5" fill="currentColor" opacity=".8">VIX regime</text>
+            <text x="60" y="459" font-size="11.5" fill="currentColor" opacity=".8">Event risk (live lookup)</text>
+            <text x="60" y="479" font-size="11" fill="var(--judgment)">→ sector bias table</text>
+
+            <rect x="335" y="338" width="250" height="154" rx="8" fill="var(--judgment-soft)" stroke="var(--judgment)" stroke-width="1.5"></rect>
+            <text x="355" y="362" font-size="10.5" fill="var(--judgment)" font-family="IBM Plex Mono, monospace" letter-spacing="1">AGENT B</text>
+            <text x="355" y="382" font-size="14" font-weight="600" fill="currentColor">Flows &amp; catalysts</text>
+            <text x="355" y="405" font-size="11.5" fill="currentColor" opacity=".8">FII/DII direction</text>
+            <text x="355" y="423" font-size="11.5" fill="currentColor" opacity=".8">Results today</text>
+            <text x="355" y="441" font-size="11.5" fill="currentColor" opacity=".8">Verify tagged headlines</text>
+            <text x="355" y="459" font-size="11.5" fill="currentColor" opacity=".8">Block deals · theme clusters</text>
+            <text x="355" y="479" font-size="11" fill="var(--judgment)">→ catalyst table</text>
+
+            <rect x="630" y="338" width="250" height="154" rx="8" fill="var(--judgment-soft)" stroke="var(--judgment)" stroke-width="1.5"></rect>
+            <text x="650" y="362" font-size="10.5" fill="var(--judgment)" font-family="IBM Plex Mono, monospace" letter-spacing="1">AGENT C</text>
+            <text x="650" y="382" font-size="14" font-weight="600" fill="currentColor">Technical</text>
+            <text x="650" y="405" font-size="11.5" fill="currentColor" opacity=".8">Reject wide ATR, extended RSI</text>
+            <text x="650" y="423" font-size="11.5" fill="currentColor" opacity=".8">Reject unconfirmed volume</text>
+            <text x="650" y="441" font-size="11.5" fill="currentColor" opacity=".8">Rank by setup quality</text>
+            <text x="650" y="459" font-size="11.5" fill="currentColor" opacity=".8">Split intraday vs swing</text>
+            <text x="650" y="479" font-size="11" fill="var(--judgment)">→ ranked levels, top 10</text>
+          </g>
+
+          <!-- synthesis -->
+          <g font-family="IBM Plex Sans, sans-serif">
+            <rect x="190" y="532" width="540" height="64" rx="8" fill="none" stroke="currentColor" stroke-width="1.6"></rect>
+            <text x="460" y="558" text-anchor="middle" font-size="14" font-weight="600" fill="currentColor">Orchestrator — synthesis</text>
+            <text x="460" y="578" text-anchor="middle" font-size="11.5" fill="currentColor" opacity=".75">cross-references three independent reads</text>
+          </g>
+
+          <!-- gate -->
+          <g font-family="IBM Plex Sans, sans-serif">
+            <rect x="140" y="636" width="640" height="64" rx="8" fill="none" stroke="var(--judgment)" stroke-width="1.6" stroke-dasharray="6 4"></rect>
+            <text x="460" y="662" text-anchor="middle" font-size="14" font-weight="600" fill="var(--judgment)">Confluence gate</text>
+            <text x="460" y="682" text-anchor="middle" font-size="11.5" fill="currentColor" opacity=".75">3 of 3 → focused (max 5) · 2 of 3 → watchlist · 1 of 3 → dropped</text>
+          </g>
+
+          <!-- outputs -->
+          <g font-family="IBM Plex Sans, sans-serif">
+            <rect x="40" y="740" width="250" height="56" rx="6" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".45"></rect>
+            <text x="165" y="764" text-anchor="middle" font-size="12.5" font-weight="600" fill="currentColor">Brief file</text>
+            <text x="165" y="781" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".7">levels + invalidation</text>
+
+            <rect x="335" y="740" width="250" height="56" rx="6" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".45"></rect>
+            <text x="460" y="764" text-anchor="middle" font-size="12.5" font-weight="600" fill="currentColor">Push notification</text>
+            <text x="460" y="781" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".7">top 5 + macro line</text>
+
+            <rect x="630" y="740" width="250" height="56" rx="6" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".45"></rect>
+            <text x="755" y="764" text-anchor="middle" font-size="12.5" font-weight="600" fill="currentColor">NotebookLM archive</text>
+            <text x="755" y="781" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".7">searchable record of calls</text>
+          </g>
+        </svg>
+      </div>
+      <figcaption>One fetch, three isolated slices. The dashed barriers are the point: Phase&nbsp;2 scores a name on
+        technical, catalyst and sector <em>agreeing</em>, which is only evidence if the three were reached
+        independently. When all three agents read one shared file, the technical agent reasoned off a news headline
+        and the macro agent audited the news block — so a name scoring 3 of 3 could be one signal counted three
+        times. Separation now lives in the filesystem rather than in a prompt asking nicely.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>Agents</h2>
+    <p class="lede">Each reads exactly one slice and never re-fetches prices. Numbers come from the file, never from
+      memory or the web — the single exception is Agent&nbsp;A's live lookup, because no macro event calendar exists
+      in the data.</p>
+
+    <div class="agents">
+      <article class="agent">
+        <header>
+          <span class="slug">Agent A</span>
+          <h3>Macro</h3>
+          <span class="file">slice_macro_&lt;date&gt;.json</span>
+        </header>
+        <ul>
+          <li><strong>Overnight read.</strong> US close, Asia, DXY, US 10Y, Brent, USDINR — what moved and why.</li>
+          <li><strong>Transmission.</strong> Crude into OMCs and aviation; USDINR into IT and pharma; 10Y into rate-sensitives.</li>
+          <li><strong>VIX regime</strong> and what it implies for risk.</li>
+          <li><strong>Event risk</strong> — RBI, CPI, Fed speakers, expiry. Sourced live; absent from the file.</li>
+        </ul>
+        <div class="toolrow">
+          <span class="chip judgment">Read</span>
+          <span class="chip judgment">WebSearch</span>
+          <span class="chip">GIFT Nifty</span>
+        </div>
+      </article>
+
+      <article class="agent">
+        <header>
+          <span class="slug">Agent B</span>
+          <h3>Flows &amp; catalysts</h3>
+          <span class="file">slice_flows_&lt;date&gt;.json</span>
+        </header>
+        <ul>
+          <li><strong>FII/DII</strong> direction, prior session, date stated explicitly.</li>
+          <li><strong>Results today</strong> — earnings only, not fund-raising or AGM housekeeping.</li>
+          <li><strong>Verify tags.</strong> Confirm or reject each <code>?</code> match; discard price-list roundups.</li>
+          <li><strong>Block deals</strong> — read direction, not size. A crossed block moves no net stock.</li>
+          <li><strong>Theme clusters</strong> of three or more real stories.</li>
+        </ul>
+        <div class="toolrow">
+          <span class="chip judgment">Read</span>
+          <span class="chip">pre-tagged symbols</span>
+        </div>
+      </article>
+
+      <article class="agent">
+        <header>
+          <span class="slug">Agent C</span>
+          <h3>Technical</h3>
+          <span class="file">slice_technical_&lt;date&gt;.json</span>
+        </header>
+        <ul>
+          <li><strong>Reject noise.</strong> ATR over 6%, RSI over 75, volume ratio under 1.0.</li>
+          <li><strong>Rank</strong> by volume confirmation, trend alignment, proximity to the 20-day high.</li>
+          <li><strong>Flag ATR-floor stops</strong> — a name with no structural level of its own.</li>
+          <li><strong>Split</strong> intraday from swing. Top 10 across both.</li>
+        </ul>
+        <div class="toolrow">
+          <span class="chip judgment">Read</span>
+          <span class="chip">precomputed levels</span>
+        </div>
+      </article>
+    </div>
+
+    <p class="note">Levels are computed in Python, not by the agent. The stop is the nearest structural level below
+      price, floored at 1&nbsp;ATR — because every <code>pullback</code> candidate sits on its own 20-day average, and
+      "nearest level" produced 0.03% stops that a normal session takes out by accident.</p>
+  </section>
+
+  <section>
+    <h2>Narrowing</h2>
+    <figure>
+      <div class="scroller">
+        <svg class="diagram" viewBox="0 0 900 300" role="img"
+             aria-label="Three independent legs — sector bias, catalyst and technical setup — converge on a confluence test; three of three reaches the focused list of at most five names, two of three becomes a watchlist, one of three is dropped.">
+          <defs>
+            <marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"></path>
+            </marker>
+          </defs>
+
+          <g font-family="IBM Plex Sans, sans-serif">
+            <rect x="20" y="34" width="234" height="46" rx="23" fill="none" stroke="currentColor" stroke-width="1.3" opacity=".5"></rect>
+            <text x="137" y="63" text-anchor="middle" font-size="12.5" fill="currentColor">Sector tailwind · Agent A</text>
+
+            <rect x="20" y="112" width="234" height="46" rx="23" fill="none" stroke="currentColor" stroke-width="1.3" opacity=".5"></rect>
+            <text x="137" y="141" text-anchor="middle" font-size="12.5" fill="currentColor">Catalyst today · Agent B</text>
+
+            <rect x="20" y="190" width="234" height="46" rx="23" fill="none" stroke="currentColor" stroke-width="1.3" opacity=".5"></rect>
+            <text x="137" y="219" text-anchor="middle" font-size="12.5" fill="currentColor">Technical setup · Agent C</text>
+          </g>
+
+          <g stroke="currentColor" fill="none" marker-end="url(#ar2)" opacity=".55" stroke-width="1.4">
+            <polyline points="254,57 320,57 320,120 352,120"></polyline>
+            <line x1="254" y1="135" x2="352" y2="135"></line>
+            <polyline points="254,213 320,213 320,150 352,150"></polyline>
+          </g>
+
+          <g font-family="IBM Plex Sans, sans-serif">
+            <rect x="356" y="105" width="128" height="60" rx="8" fill="var(--judgment-soft)" stroke="var(--judgment)" stroke-width="1.5"></rect>
+            <text x="420" y="131" text-anchor="middle" font-size="12.5" font-weight="600" fill="var(--judgment)">confluence</text>
+            <text x="420" y="149" text-anchor="middle" font-size="11" fill="currentColor" opacity=".75">count the legs</text>
+          </g>
+
+          <g stroke="currentColor" fill="none" marker-end="url(#ar2)" opacity=".55" stroke-width="1.4">
+            <polyline points="484,120 540,120 540,57 592,57"></polyline>
+            <line x1="484" y1="135" x2="592" y2="135"></line>
+            <polyline points="484,150 540,150 540,213 592,213"></polyline>
+          </g>
+
+          <g font-family="IBM Plex Sans, sans-serif">
+            <rect x="596" y="30" width="284" height="54" rx="8" fill="var(--judgment-soft)" stroke="var(--judgment)" stroke-width="1.8"></rect>
+            <text x="616" y="52" font-size="12" font-weight="600" fill="var(--judgment)" font-family="IBM Plex Mono, monospace">3 of 3</text>
+            <text x="700" y="52" font-size="13" font-weight="600" fill="currentColor">Focused list</text>
+            <text x="616" y="71" font-size="11" fill="currentColor" opacity=".75">at most five names, each with an invalidation level</text>
+
+            <rect x="596" y="110" width="284" height="50" rx="8" fill="none" stroke="currentColor" stroke-width="1.3" opacity=".55"></rect>
+            <text x="616" y="132" font-size="12" font-weight="600" fill="currentColor" font-family="IBM Plex Mono, monospace" opacity=".8">2 of 3</text>
+            <text x="700" y="132" font-size="13" font-weight="600" fill="currentColor">Watchlist</text>
+            <text x="616" y="150" font-size="11" fill="currentColor" opacity=".7">carried, not acted on</text>
+
+            <rect x="596" y="186" width="284" height="50" rx="8" fill="none" stroke="var(--danger)" stroke-width="1.2" stroke-dasharray="5 4" opacity=".8"></rect>
+            <text x="616" y="208" font-size="12" font-weight="600" fill="var(--danger)" font-family="IBM Plex Mono, monospace">1 of 3</text>
+            <text x="700" y="208" font-size="13" font-weight="600" fill="var(--danger)">Dropped</text>
+            <text x="616" y="226" font-size="11" fill="currentColor" opacity=".7">a setup with no reason behind it</text>
+          </g>
+
+          <line x1="20" y1="262" x2="880" y2="262" stroke="currentColor" opacity=".2" stroke-width="1"></line>
+          <text x="20" y="283" font-size="11.5" fill="currentColor" opacity=".7" font-family="IBM Plex Sans, sans-serif">
+            A name with no computable invalidation level does not reach any list.
+          </text>
+        </svg>
+      </div>
+      <figcaption>The gate is a screener, not a signal service. Each focused name ships with its setup, its catalyst,
+        a trigger and an invalidation level — the evidence for the call, not the call itself. Sizing and the decision
+        to trade stay with you.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>What runs where</h2>
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Stage</th>
+            <th>Work</th>
+            <th>Tools</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="stage">Schedule</td>
+            <td>Weekday trigger, 07:00 IST<span class="sub">not yet authorized</span></td>
+            <td class="mono">scheduled-tasks MCP</td>
+          </tr>
+          <tr>
+            <td class="stage">Phase 0</td>
+            <td>Universe, prices, screen, flows, deals, events, news<span class="sub">deterministic — scraping in an agent hallucinates numbers</span></td>
+            <td class="mono">python · yfinance · nsepython · pandas · feedparser · requests</td>
+          </tr>
+          <tr>
+            <td class="stage">Phase 1</td>
+            <td>Three agents, parallel, one slice each</td>
+            <td class="mono">Agent (general-purpose) × 3 · Read · WebSearch (A only)</td>
+          </tr>
+          <tr>
+            <td class="stage">Phase 2</td>
+            <td>Confluence scoring and narrowing<span class="sub">orchestrator, not an agent</span></td>
+            <td class="mono">—</td>
+          </tr>
+          <tr>
+            <td class="stage">Phase 3</td>
+            <td>Brief, notification, archive</td>
+            <td class="mono">Write · PushNotification · notebooklm skill · Artifact</td>
+          </tr>
+          <tr>
+            <td class="stage">Weekly</td>
+            <td>Deep dive per focused name; review of your own past calls</td>
+            <td class="mono">notebooklm skill · markitdown MCP</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="lede">No API keys anywhere in the daily path. Chartink was evaluated and dropped — CSRF session scraping
+      for a screen pandas does locally in fifteen lines. FRED was dropped because yfinance carries the US macro
+      tickers without one.</p>
+  </section>
+
+  <section>
+    <h2>The dividing line</h2>
+    <p class="lede">Every design decision in this pipeline comes from one question: does this need judgment, or does
+      it just need doing?</p>
+    <div class="split">
+      <div class="half machine">
+        <h3>Machine does recall</h3>
+        <ul>
+          <li>Reads all 209 company names against every headline and never gets bored</li>
+          <li>Drops anything older than 48 hours — a stale feed served April-2024 items alongside live ones</li>
+          <li>Removes cross-posted duplicates, so a count of three stories is three real stories</li>
+          <li>Nets deal legs per symbol, so a matched block cannot read as accumulation</li>
+          <li>Computes every level, floored at 1 ATR</li>
+        </ul>
+      </div>
+      <div class="half judgment">
+        <h3>Agent does precision</h3>
+        <ul>
+          <li>Decides whether a mention is actually an event</li>
+          <li>Resolves or refuses ambiguous tickers rather than guessing</li>
+          <li>Reads transmission — which sector a crude move actually hits</li>
+          <li>Rejects setups that clear the filters but are extended</li>
+          <li>Flags when the data itself would mislead</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note">Group names shared by several listed entities are suppressed before an agent ever sees them:
+      peeling generic words reduced "Bajaj Finance" to "Bajaj", which four listed entities answer to, and it duly
+      tagged the wrong company onto a Bajaj Auto headline. Any alias more than one symbol claims names a family, not
+      a company.</p>
+  </section>
+
+  <footer>
+    <p>Screener, not a signal service. Position sizing and the decision to trade are yours.</p>
+    <p>Not yet scheduled · files currently at <code>D:\Work\Claude\trading</code></p>
+  </footer>
+
+</div>
